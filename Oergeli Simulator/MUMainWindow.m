@@ -30,6 +30,7 @@
 // Updated in onFrame:.
 @property(nonatomic)float volume;
 
+@property (strong) IBOutlet NSTextField *pushPullLabel;
 
 @end
 
@@ -49,6 +50,8 @@ static NSArray *keysArr;
 	//
 	// CHANGE THIS VALUE TO CHANGE PUSH/PULL WITHOUT LEAP.
 	pushPull = MUPull;
+
+	[self updatePushPullLabel];
 }
 
 -(void)keyDown:(NSEvent *)theEvent
@@ -60,6 +63,12 @@ static NSArray *keysArr;
 			int index = (int)[keysArr indexOfObject:[NSNumber numberWithChar:character]];
 
 			[[MUAudioPlayer sharedInstance] btnAtIndex:index stopPlay:MUPlay pushPull:pushPull volume:self.volume];
+
+			if (character == '8' || character == '9' || character == '7' || character == '6' || character == '5' ||
+				character == '4' || character == '3' || character == '2' || character == '1' || character == '-' ||
+				character == '=' || character == '0' || character == ' ' || character == '') {
+				[self changeDirection];
+			}
 		}
 	}
 }
@@ -76,6 +85,27 @@ static NSArray *keysArr;
 		}
 	}
 }
+
+-(void)changeDirection
+{
+	if (pushPull == MUPull) {
+		pushPull = MUPush;
+	} else if (pushPull == MUPush) {
+		pushPull = MUPull;
+	};
+
+	[self updatePushPullLabel];
+}
+
+-(void)updatePushPullLabel
+{
+	if (pushPull == MUPull) {
+		self.pushPullLabel.stringValue = @"Pull\n (press a key on the numbers row on the your keyboard to change)";
+	} else if (pushPull == MUPush) {
+		self.pushPullLabel.stringValue = @"Push\n (press a key on the numbers row on the your keyboard to change)";
+	}
+}
+
 
 #pragma mark Leap methods
 
